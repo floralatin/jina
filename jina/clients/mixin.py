@@ -9,7 +9,7 @@ from jina.importer import ImportExtensions
 if TYPE_CHECKING:
     from jina import DocumentArray
     from jina.clients.base import CallbackFnType, InputType
-    from jina.types.request import Response
+    from jina.types.request.data import Response
 
 
 def _include_results_field_in_param(parameters: Optional['Dict']) -> 'Dict':
