@@ -263,6 +263,7 @@ class Deployment(BaseDeployment):
             if not type(_all_port_monitoring) == list
             else _all_port_monitoring
         )
+        self.args.port_monitoring = int(self.args.all_port_monitoring[0])
 
     def update_pod_args(self):
         """Update args of all its pods based on Deployment args. Including head/tail"""
@@ -701,14 +702,21 @@ class Deployment(BaseDeployment):
                     # we should rather use the pre assigned one
                     args.port = args.port
                     _args.port_monitoring = args.all_port_monitoring[0]
-                else:
+                elif args.shards == 1:
 
                     _args.port_monitoring = (
                         helper.random_port()
                         if len(args.all_port_monitoring) < replica_id + 1
                         else args.all_port_monitoring[replica_id]
                     )
+                    _args.port = helper.random_port()
 
+                else:
+                    _args.port_monitoring = (
+                        helper.random_port()
+                        if len(args.all_port_monitoring) < replica_id + 2
+                        else args.all_port_monitoring[replica_id + 1]
+                    )
                     _args.port = helper.random_port()
 
                 # pod workspace if not set then derive from workspace
